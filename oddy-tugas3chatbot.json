@@ -1,0 +1,155 @@
+{
+  "name": "oddy-tugas3chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi oll! \nMy name is Dodod. How can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ff3de69c-e858-4169-8a41-6b8619b7fba1",
+      "name": "When chat message received",
+      "webhookId": "9f703b6a-9d3d-4278-bb4a-48d72922a787"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Anda berperan sebagai chatbot AI untuk NF Academy.\n\nTugas Anda adalah memberikan jawaban terkait informasi pelatihan dengan mengacu pada data yang tersedia di Google Sheets.\n\nStruktur data meliputi:\n\nJenis Program Pelatihan\nNama Pelatihan/Kursus di NF Academy\nDeskripsi Pelatihan/Kursus di NF Academy\nHarga atau Biaya\n\nPastikan seluruh jawaban hanya berdasarkan data yang ada, tanpa menambahkan informasi di luar itu.\nJika informasi yang diminta tidak tersedia, berikan respon yang sopan dan informatif."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        176,
+        0
+      ],
+      "id": "27aade3e-3a12-4294-bf49-65853bfafe82",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        48,
+        208
+      ],
+      "id": "2bd7445b-99d7-400c-b8ac-8584984be5cc",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "0NhUv5WQwbVbb0ix",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        192,
+        208
+      ],
+      "id": "10420357-b2d2-45ea-b29d-2fa992a958d5",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1jGupBkkhJcyoq00V4aEtjC9nz4PzT9UHj0GUVw641xA"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        208
+      ],
+      "id": "eab2a57d-fa24-4732-8846-a0dfabed95a6",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "MtyacYA34mv0y8l9",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "3c1674f0-c21f-41e7-8826-7893dd4599e8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3b7232a3e2715d390ba62091fbfd925926ab4956cdb5c2101d6d8b00f5dcfb78"
+  },
+  "id": "V73R0YQKTVaTR44y",
+  "tags": []
+}
